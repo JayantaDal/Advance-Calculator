@@ -37,4 +37,21 @@
             <button class="scientific" onclick="append('sin(')">sin</button>
             <button class="scientific" onclick="append('cos(')">cos</button>
             <button class="scientific" onclick="append('tan(')">tan</button>
-            <button class="scientific" onclick="append('sqrt(')">√</
+            <button class="scientific" onclick="append('sqrt(')">√</button>
+            <button class="scientific" onclick="append('^')">^</button>
+            <button class="scientific" onclick="append('log(')">log</button>
+            <button class="scientific" onclick="append('ln(')">ln</button>
+            <button class="function" onclick="append('%')">%</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@9.4.4/dist/math.min.js"></script>
+    <script src="script.js" charset="utf-8"></script>
+    <script>
+        // Fallback if mathjs fails to load
+        if (typeof math === 'undefined') {
+            console.error('mathjs failed to load. Please check your internet connection or host math.js locally.');
+            alert('Calculator functionality is limited without mathjs. Please ensure an internet connection or host math.js locally.');
+        }
+    </script>
+</body>
+</html>
