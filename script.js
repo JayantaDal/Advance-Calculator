@@ -2,24 +2,39 @@ let display = document.getElementById('display');
 let currentExpression = '';
 let memory = 0;
 
+if (!display) {
+    console.error('Display element not found. Check your HTML.');
+}
+
 function append(value) {
+    if (!display) return;
     currentExpression += value;
-    display.textContent = currentExpression;
+    display.textContent = currentExpression || '0';
+    console.log('Appended:', value, 'Current Expression:', currentExpression);
 }
 
 function clearDisplay() {
+    if (!display) return;
     currentExpression = '';
     display.textContent = '0';
     memory = 0; // Reset memory on clear
+    console.log('Display cleared');
 }
 
 function backspace() {
+    if (!display) return;
     currentExpression = currentExpression.slice(0, -1);
     display.textContent = currentExpression || '0';
+    console.log('Backspace applied, Current Expression:', currentExpression);
 }
 
 function calculate() {
+    if (!display) return;
     try {
+        if (typeof math === 'undefined') {
+            throw new Error('mathjs is not loaded');
+        }
+
         // Handle percentage: If % is present, apply it to the last number
         let expression = currentExpression;
         if (expression.includes('%')) {
@@ -42,39 +57,58 @@ function calculate() {
         let result = math.evaluate(expression);
         currentExpression = result.toString();
         display.textContent = currentExpression;
+        console.log('Calculated result:', currentExpression);
     } catch (error) {
         display.textContent = 'Error';
         currentExpression = '';
+        console.error('Calculation error:', error.message);
+        alert('Error in calculation. Check your expression or ensure mathjs is loaded.');
     }
 }
 
 function memoryClear() {
     memory = 0;
+    console.log('Memory cleared');
 }
 
 function memoryRecall() {
+    if (!display) return;
     currentExpression += memory;
     display.textContent = currentExpression;
+    console.log('Memory recalled, Current Expression:', currentExpression);
 }
 
 function memoryAdd() {
+    if (!display) return;
     try {
+        if (typeof math === 'undefined') {
+            throw new Error('mathjs is not loaded');
+        }
         memory += math.evaluate(currentExpression || '0');
+        console.log('Memory added, New memory value:', memory);
     } catch (error) {
-        display.textContent = 'Error';
+        console.error('Memory add error:', error.message);
+        alert('Error adding to memory. Check your expression or ensure mathjs is loaded.');
     }
 }
 
 function memorySubtract() {
+    if (!display) return;
     try {
+        if (typeof math === 'undefined') {
+            throw new Error('mathjs is not loaded');
+        }
         memory -= math.evaluate(currentExpression || '0');
+        console.log('Memory subtracted, New memory value:', memory);
     } catch (error) {
-        display.textContent = 'Error';
+        console.error('Memory subtract error:', error.message);
+        alert('Error subtracting from memory. Check your expression or ensure mathjs is loaded.');
     }
 }
 
 // Add keyboard support
 document.addEventListener('keydown', (e) => {
+    if (!display) return;
     if (e.key >= '0' && e.key <= '9' || e.key === '.') {
         append(e.key);
     } else if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
@@ -88,4 +122,5 @@ document.addEventListener('keydown', (e) => {
     } else if (e.key.toLowerCase() === 'c') {
         clearDisplay();
     }
+    console.log('Key pressed:', e.key);
 });
